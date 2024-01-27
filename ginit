@@ -1,0 +1,21 @@
+#!/bin/sh
+
+mkdir "$1"
+cd "$1" || return 1
+cat <<EOF >main.go
+package main
+
+import "fmt"
+
+/*
+*/
+
+func problem() {}
+
+func main() {
+	fmt.Println(problem())
+}
+EOF
+go mod init github.com/chaitanyabsprip/"$1"
+go mod tidy
+exec nvim main.go
