@@ -33,8 +33,8 @@ Constraints:
 */
 
 func subsets(nums []int) [][]int {
-	return backtrack(nums, []int{}, [][]int{{}}, 1)
-	// return bt(nums, [][]int{{}})
+	// return backtrack(nums, []int{}, [][]int{{}}, 1)
+	return bt(nums, [][]int{{}})
 }
 
 func bt(nums []int, result [][]int) [][]int {
@@ -47,17 +47,17 @@ func bt(nums []int, result [][]int) [][]int {
 	return bt(nums[1:], result)
 }
 
-func backtrack(nums, curr []int, result *[][]int, n int) {
-	if len(nums) == 0 {
-		*result = append(*result, curr)
-	}
-	for _, num := range nums {
-		if n > 1 {
-			backtrack(nums[1:], append(curr, nums[0]), result, n)
-			backtrack(nums[1:], curr, result, n)
-		}
-	}
-}
+// func backtrack(nums, curr []int, result *[][]int, n int) {
+// 	if len(nums) == 0 {
+// 		*result = append(*result, curr)
+// 	}
+// 	for _, num := range nums {
+// 		if n > 1 {
+// 			backtrack(nums[1:], append(curr, nums[0]), result, n)
+// 			backtrack(nums[1:], curr, result, n)
+// 		}
+// 	}
+// }
 
 /*
 
@@ -65,6 +65,7 @@ func backtrack(nums, curr []int, result *[][]int, n int) {
 ---------
 
 []
+[[]]
 [[] [1]]
 [[] [1] [2] [1, 2]]
 [[] [1] [2] [1, 2] [3] [1, 3] [2, 3] [1, 2, 3]]
@@ -94,5 +95,5 @@ func backtrack(nums, curr []int, result *[][]int, n int) {
 // }
 
 func main() {
-	fmt.Println(subsets([]int{1, 2, 3}))
+	fmt.Println(subsets([]int{9, 0, 3, 5, 7}))
 }
