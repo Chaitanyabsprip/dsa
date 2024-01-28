@@ -1,6 +1,6 @@
 package main
 
-import "golang.org/x/tools/present"
+import "fmt"
 
 /*
 There are a total of numCourses courses you have to take, labeled from 0 to
@@ -39,30 +39,39 @@ prerequisites[i] are unique.
 */
 
 func canFinish(numCourses int, prerequisites [][]int) bool {
-	seen := make([]bool, numCourses)
-	var fun func([][]int)
-	fun = func(prereqs [][]int) {
-		if len(prereqs) == 0 {
-			return
-		}
-		i := prereqs[0][0]
-		if seen[i] {
-			return
-		}
-		seen[i] = true
-		fun(prereqs[1:])
+	if len(prerequisites) == 0 {
+		return true
 	}
-	fun(prerequisites)
-	started := false
-	for _, s := range seen {
-		if !s {
-			if started {
+	nodes := make(map[int][]int, 0)
+
+	for _, edges := range prerequisites {
+		from := edges[1]
+		nodes[from] = append(nodes[from], edges[0])
+	}
+	seen := make(map[int]bool)
+	visiting := make(map[int]bool)
+
+	var fun func(int) bool
+	fun = func(node int) bool {
+		if visiting[node] {
+			return false
+		}
+		if seen[node] {
+			return true
+		}
+		seen[node] = true
+		visiting[node] = true
+		for _, n := range nodes[node] {
+			if !fun(n) {
 				return false
 			}
-			started = true
 		}
+		visiting[node] = false
+		return true
 	}
-	return true
+
+	res := fun(prerequisites[0][1])
+	return res
 }
 
 func main() {}
