@@ -83,24 +83,16 @@ func pacificAtlantic(heights [][]int) [][]int {
 	return result
 }
 
-func recurse(i, j int, seen *[][]bool, heights [][]int) {
-	if i < 0 || i >= len(*seen) || j < 0 || j >= len((*seen)[0]) || (*seen)[i][j] {
+func recurse(i, j, prev int, seen *[][]bool, heights [][]int) {
+	if i < 0 || i >= len(*seen) || j < 0 || j >= len((*seen)[0]) || (*seen)[i][j] || heights[i][j] < prev {
 		return
 	}
 	(*seen)[i][j] = true
 	curr := heights[i][j]
-	if j-1 >= 0 && curr <= heights[i][j-1] {
-		recurse(i, j-1, seen, heights)
-	}
-	if j+1 < len((*seen)[0]) && curr <= heights[i][j+1] {
-		recurse(i, j+1, seen, heights)
-	}
-	if i-1 >= 0 && curr <= heights[i-1][j] {
-		recurse(i-1, j, seen, heights)
-	}
-	if i+1 < len(*seen) && curr <= heights[i+1][j] {
-		recurse(i+1, j, seen, heights)
-	}
+	recurse(i, j-1, curr, seen, heights)
+	recurse(i, j+1, curr, seen, heights)
+	recurse(i-1, j, curr, seen, heights)
+	recurse(i+1, j, curr, seen, heights)
 }
 
 func main() {}
