@@ -38,40 +38,56 @@ prerequisites[i] are unique.
 
 */
 
+/*
+1. check what nodes don't have any incoming connections
+2. remove all outgoing connections from the node
+3. step 1
+*/
 func canFinish(numCourses int, prerequisites [][]int) bool {
 	if len(prerequisites) == 0 {
 		return true
 	}
-	nodes := make(map[int][]int, 0)
+	nodes := make(map[int][]int)
+	edgeCount := make(map[int]int)
 
 	for _, edges := range prerequisites {
 		from := edges[1]
-		nodes[from] = append(nodes[from], edges[0])
-	}
-	seen := make(map[int]bool)
-	visiting := make(map[int]bool)
-
-	var fun func(int) bool
-	fun = func(node int) bool {
-		if visiting[node] {
-			return false
-		}
-		if seen[node] {
-			return true
-		}
-		seen[node] = true
-		visiting[node] = true
-		for _, n := range nodes[node] {
-			if !fun(n) {
-				return false
-			}
-		}
-		visiting[node] = false
-		return true
+		to := edges[0]
+		nodes[from] = append(nodes[from], to)
+		edgeCount[to]++
 	}
 
-	res := fun(prerequisites[0][1])
-	return res
+	return re(nodes, edgeCount)
 }
 
-func main() {}
+func re(nodes map[int][]int, edgeCount map[int]int) bool {
+	// fmt.Print("from ", nodes, " ")
+	if len(nodes) == 0 {
+		return true
+	}
+	n := -1
+	for node, adjs := range nodes {
+		val := edgeCount[node]
+		if val == 0 && len(adjs) > 0 {
+			n = node
+			break
+		}
+	}
+	// fmt.Println("selected", n)
+	if n == -1 {
+		return false
+	}
+	for _, node := range nodes[n] {
+		edgeCount[node]--
+	}
+	delete(nodes, n)
+	return re(nodes, edgeCount)
+}
+
+func main() {
+	fmt.Println(canFinish(20, [][]int{{0, 10}, {3, 18}, {5, 5}, {6, 11}, {11, 14}, {13, 1}, {15, 1}, {17, 4}})) // false
+	fmt.Println(canFinish(2, [][]int{{1, 0}}))                                                                  // true
+	fmt.Println(canFinish(2, [][]int{{1, 0}, {0, 1}}))                                                          // false
+	fmt.Println(canFinish(2, [][]int{{1, 4}, {2, 4}, {3, 1}, {3, 2}}))                                          // true
+	fmt.Println(canFinish(2, [][]int{{1, 0}, {1, 2}, {0, 1}}))                                                  // false
+}

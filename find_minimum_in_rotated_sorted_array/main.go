@@ -57,12 +57,12 @@ func findMin(nums []int) int {
 		return nums[0]
 	}
 	lower := 0
-	upper := len(nums) - 1
-	for lower <= upper {
-		mid := lower + (upper-lower)/2
+	upper := len(nums)
+	for lower < upper {
+		mid := (upper + lower) / 2
 		fmt.Println(lower, upper, mid)
 
-		if nums[mid] > nums[mid+1] {
+		if mid+1 < len(nums) && nums[mid] > nums[mid+1] {
 			return nums[mid+1]
 		}
 		if nums[mid] < nums[mid-1] {

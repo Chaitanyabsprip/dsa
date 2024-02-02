@@ -37,11 +37,11 @@ Constraints:
 
 func findMedianSortedArrays(nums1 []int, nums2 []int) float64 {
 	var former, latter []int
-	if nums1[0] >= nums2[0] {
+	if len(nums1) >= len(nums2) {
 		former = nums1
 		latter = nums2
 	}
-	if nums1[0] < nums2[0] {
+	if len(nums1) < len(nums2) {
 		former = nums2
 		latter = nums1
 	}
